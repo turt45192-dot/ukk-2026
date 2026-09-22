@@ -70,14 +70,12 @@ class PenggunaController extends Controller
         return redirect()->route('pengguna.index');
     }
 
-    public function destroy($pengguna)
+      public function destroy(Request $request, $id)
     {
-        $siswa = Siswa::where('id_siswa', $pengguna)->first();
-        if ($siswa) {
-            User::where('id', $siswa->id_user)->delete();
-            $siswa->delete();
-        }
+        $user = User::findOrFail($id);
+        $user->delete();
 
-        return redirect()->route('pengguna.index');
+        return redirect()->route('pengguna.index')->with('success', 'pengguna berhasil dihapus.');
     }
+
 }

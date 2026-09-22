@@ -7,6 +7,7 @@ use App\Controllers\Core\DocsController;
 use App\Controllers\Core\RoleController;
 use App\Controllers\Core\UserController;
 use App\Controllers\KategoriController;
+use App\Controllers\PenggunaController;
 use Sakuci\Route;
 
 /*
@@ -68,7 +69,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'admin'], function () {
     Route::post('/pengguna', [PenggunaController::class, 'store'])->name('pengguna.store');
     Route::get('/pengguna/{pengguna}/edit', [PenggunaController::class, 'edit'])->name('pengguna.edit');
     Route::put('/pengguna/{pengguna}', [PenggunaController::class, 'update'])->name('pengguna.update');
-    Route::delete('/pengguna/{pengguna', [PenggunaController::class, 'destroy'])->name('pengguna.destroy');
+    Route::delete('/pengguna/{pengguna}', [PenggunaController::class, 'destroy'])->name('pengguna.destroy');
     });
 
 /*

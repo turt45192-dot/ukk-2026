@@ -25,7 +25,7 @@
             <td>
                 <a href="{{ route('pengguna.edit', ['pengguna' => $d->id_siswa]) }}" class="btn btn-warning btn-sm">Edit</a>
 
-                <form action="{{ route('pengguna.destroy', ['pengguna' => $d->id_siswa]) }}" method="POST" style="display:inline;">
+                <form action="{{ route('pengguna.destroy', ['pengguna' => $d->id]) }}" method="POST" style="display:inline;">
                     @csrf
                     @method('DELETE')
                     <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Yakin mau hapus?')">Hapus</button>
