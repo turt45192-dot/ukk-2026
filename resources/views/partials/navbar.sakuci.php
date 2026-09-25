@@ -34,9 +34,15 @@
                     <a class="nav-link {{ is_route('home') ? 'active' : '' }}" href="{{ route('home') }}">Beranda</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link {{ is_route('kategori.index') ? 'active' : '' }}" 
-                    href="{{ route('kategori.index') }}">Kategori</a>
+                    <a class="nav-link {{ is_route('home') ? 'active' : '' }}" href="{{ route('pengguna.index') }}">Pengguna</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link {{ is_route('home') ? 'active' : '' }}" href="{{ route('kategori.index') }}">Kategori</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {{ is_route('home') ? 'active' : '' }}" href="{{ route('alat.index') }}">Alat</a>
+                </li>
+              
                 @php
                     $currentUser = \App\Models\User::current();
                 @endphp
