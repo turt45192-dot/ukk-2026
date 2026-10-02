@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>@yield('title', config('app.name'))</title>
 
-    {{-- Terapkan tema tersimpan sebelum apa pun dirender, supaya tidak ada flash warna --}}
+    {{-- Terapkan tema tersimpan sebelum apa pun dirender --}}
     <script>
         (function () {
             var saved = localStorage.getItem('sakuci-theme');
@@ -14,8 +14,12 @@
         })();
     </script>
 
-    {{-- Bootstrap 5.3.8 -- file lokal, tidak butuh internet --}}
+    {{-- Bootstrap 5.3.8 CSS --}}
     <link rel="stylesheet" href="{{ asset('vendor/bootstrap/css/bootstrap.min.css') }}">
+    
+    {{-- CDN Bootstrap Icons (Wajib ada agar logo/ikon muncul) --}}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
 </head>
 <body class="d-flex flex-column min-vh-100 bg-body-tertiary">

@@ -9,18 +9,13 @@ use App\Controllers\Core\UserController;
 use App\Controllers\KategoriController;
 use App\Controllers\PenggunaController;
 use App\Controllers\AlatController;
+use App\Controllers\AspirasiController;
 use Sakuci\Route;
 
 /*
 |--------------------------------------------------------------------------
 | Route Web
 |--------------------------------------------------------------------------
-| Daftarkan seluruh route aplikasi di sini.
-|
-| Cara menulis action:
-|   [HomeController::class, 'index']   -> disarankan
-|   'HomeController@index'             -> namespace App\Controllers otomatis
-|   function () { ... }                -> closure
 */
 
 Route::get('/', function () {
@@ -31,9 +26,8 @@ Route::get('/docs', [DocsController::class, 'index'])->name('docs');
 
 /*
 |--------------------------------------------------------------------------
-| Login multi-role
+| Login multi-role & Auth
 |--------------------------------------------------------------------------
-| Lihat /docs untuk penjelasan lengkap langkah demi langkah.
 */
 
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login')->middleware('guest');
@@ -45,6 +39,11 @@ Route::post('/register', [AuthController::class, 'register'])->name('register.at
 
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard')->middleware('auth');
 
+/*
+|--------------------------------------------------------------------------
+| Route Khusus Admin
+|--------------------------------------------------------------------------
+*/
 Route::group(['prefix' => 'admin', 'middleware' => 'admin'], function () {
     Route::get('/', [DashboardController::class, 'admin'])->name('admin.dashboard');
 
@@ -71,41 +70,41 @@ Route::group(['prefix' => 'admin', 'middleware' => 'admin'], function () {
     Route::get('/pengguna/{pengguna}/edit', [PenggunaController::class, 'edit'])->name('pengguna.edit');
     Route::put('/pengguna/{pengguna}', [PenggunaController::class, 'update'])->name('pengguna.update');
     Route::delete('/pengguna/{pengguna}', [PenggunaController::class, 'destroy'])->name('pengguna.destroy');
+});
 
+/*
+|--------------------------------------------------------------------------
+| Route Umum (Dapat diakses oleh Siswa & Admin yang sudah Login)
+|--------------------------------------------------------------------------
+*/
+Route::group(['middleware' => 'auth'], function () {
+    // Rute Alat
     Route::get('/alat', [AlatController::class, 'index'])->name('alat.index');
     Route::get('/alat/create', [AlatController::class, 'create'])->name('alat.create');
     Route::post('/alat', [AlatController::class, 'store'])->name('alat.store');
     Route::get('/alat/{alat}/edit', [AlatController::class, 'edit'])->name('alat.edit');
     Route::put('/alat/{alat}', [AlatController::class, 'update'])->name('alat.update');
     Route::delete('/alat/{alat}', [AlatController::class, 'destroy'])->name('alat.destroy');
-    });
+
+    // Rute Aspirasi
+    Route::get('/aspirasi', [AspirasiController::class, 'index'])->name('aspirasi.index');
+    Route::get('/aspirasi/create', [AspirasiController::class, 'create'])->name('aspirasi.create');
+    Route::post('/aspirasi', [AspirasiController::class, 'store'])->name('aspirasi.store');
+    Route::get('/aspirasi/{aspirasi}/edit', [AspirasiController::class, 'edit'])->name('aspirasi.edit');
+    Route::put('/aspirasi/{aspirasi}', [AspirasiController::class, 'update'])->name('aspirasi.update');
+    Route::delete('/aspirasi/{aspirasi}', [AspirasiController::class, 'destroy'])->name('aspirasi.destroy');
+});
 
 /*
 |--------------------------------------------------------------------------
 | Route role dinamis
 |--------------------------------------------------------------------------
-| Blok di bawah ini dikelola otomatis oleh RoleController saat admin
-| menambah, mengganti nama, atau menghapus role lewat /admin/roles.
-| Jangan diedit manual -- perubahan bisa tertimpa.
 */
 // @generated-roles:start
 
+// @role:siswa:start
+Route::group(['prefix' => 'siswa', 'middleware' => 'siswa'], function () {
+    Route::get('/', [DashboardController::class, 'index'])->name('siswa.dashboard');
+});
+// @role:siswa:end
 // @generated-roles:end
-
-/*
-|--------------------------------------------------------------------------
-| Contoh (hapus/ubah sesuai kebutuhan)
-|--------------------------------------------------------------------------
-|
-| use App\Controllers\BukuController;
-|
-| Route::get('/buku', [BukuController::class, 'index'])->name('buku.index');
-|
-| // Tujuh route CRUD sekaligus: index, create, store, show, edit, update, destroy
-| // Route::resource
-|
-| // Group dengan prefix dan middleware bersama
-| Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
-|     Route::get('/dashboard', [DashboardController::class, 'index']);
-| });
-*/

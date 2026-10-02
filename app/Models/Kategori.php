@@ -14,4 +14,13 @@ class Kategori extends Model
         'nama_kategori',
         'keterangan'
     ];
+
+    /**
+     * Relasi One-to-Many ke Model Alat
+     * Satu kategori memiliki banyak alat
+     */
+    public function alat()
+    {
+        return $this->hasMany(Alat::class, 'id_kategori', 'id_kategori');
+    }
 }
