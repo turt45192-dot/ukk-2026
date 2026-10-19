@@ -1,6 +1,6 @@
 @php
     $currentUser = \App\Models\User::current();
-    
+
     // Cek status database secara aman
     $dbConnected = false;
     try {
@@ -11,15 +11,52 @@
     }
 @endphp
 
+{{-- CSS Sidebar: tetap menyala di desktop, drawer di mobile/tablet --}}
+<style>
+    /* Lebar sidebar (mobile = drawer) */
+    #sidebarMenu {
+        width: 280px;
+    }
+
+    /* Desktop (>= 992px): sidebar menempel tetap di kiri */
+    @media (min-width: 992px) {
+        body {
+            padding-left: 280px; /* sisakan ruang agar topbar & konten tidak tertutup */
+        }
+
+        #sidebarMenu.offcanvas-lg {
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            width: 280px !important;
+            height: 100vh !important;
+            visibility: visible !important;
+            transform: none !important;
+            transition: none;
+            z-index: 1030;
+            display: flex;
+            flex-direction: column;
+            background-color: var(--bs-body-bg) !important;
+            border-right: var(--bs-border-width) solid var(--bs-border-color) !important;
+        }
+
+        /* Isi menu bisa di-scroll bila layar pendek */
+        #sidebarMenu .offcanvas-body {
+            overflow-y: auto;
+        }
+    }
+</style>
+
 {{-- Header Atas / Topbar --}}
 <header class="navbar navbar-expand bg-body border-bottom sticky-top shadow-sm py-2 px-3">
     <div class="container-fluid">
         <div class="d-flex align-items-center gap-2">
-            {{-- Tombol Buka Sidebar Menu --}}
-            <button class="btn btn-outline-brand border-0 d-flex align-items-center justify-content-center p-2 rounded-3 text-body" 
-                    type="button" 
-                    data-bs-toggle="offcanvas" 
-                    data-bs-target="#sidebarMenu" 
+            {{-- Tombol Buka Sidebar Menu (hanya tampil di mobile/tablet) --}}
+            <button class="btn btn-outline-brand border-0 d-flex d-lg-none align-items-center justify-content-center p-2 rounded-3 text-body"
+                    type="button"
+                    data-bs-toggle="offcanvas"
+                    data-bs-target="#sidebarMenu"
                     aria-controls="sidebarMenu"
                     aria-label="Buka Menu Sidebar">
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -29,8 +66,8 @@
                 </svg>
             </button>
 
-            {{-- Brand Mark & Nama Aplikasi --}}
-            <a class="navbar-brand fw-bold m-0 d-flex align-items-center gap-2 text-body ms-1" href="{{ route('home') }}">
+            {{-- Brand Mark & Nama Aplikasi (hanya tampil di mobile/tablet, di desktop sudah ada di sidebar) --}}
+            <a class="navbar-brand fw-bold m-0 d-flex d-lg-none align-items-center gap-2 text-body ms-1" href="{{ route('home') }}">
                 <div class="brand-mark flex-shrink-0">
                     <i class="bi bi-building"></i>
                 </div>
@@ -63,9 +100,9 @@
     </div>
 </header>
 
-{{-- Drawer Sidebar Offcanvas --}}
-<div class="offcanvas offcanvas-start bg-body text-body border-end" tabindex="-1" id="sidebarMenu" aria-labelledby="sidebarMenuLabel" style="width: 280px;">
-    
+{{-- Sidebar: offcanvas di mobile, tetap menyala di desktop (offcanvas-lg) --}}
+<div class="offcanvas-lg offcanvas-start bg-body text-body border-end" tabindex="-1" id="sidebarMenu" aria-labelledby="sidebarMenuLabel">
+
     {{-- Header Sidebar --}}
     <div class="offcanvas-header border-bottom p-3">
         <div class="d-flex align-items-center gap-2">
@@ -77,14 +114,15 @@
                 <small class="text-body-secondary d-block mt-1" style="font-size: 0.72rem;">Sarana & Prasarana Sekolah</small>
             </div>
         </div>
-        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Tutup"></button>
+        {{-- Tombol tutup hanya di mobile/tablet --}}
+        <button type="button" class="btn-close text-reset d-lg-none" data-bs-dismiss="offcanvas" data-bs-target="#sidebarMenu" aria-label="Tutup"></button>
     </div>
 
     {{-- Body / Menu Navigasi Sidebar --}}
     <div class="offcanvas-body d-flex flex-column justify-content-between p-3">
-        
+
         <ul class="nav nav-pills flex-column gap-1">
-        
+
             {{-- SEKSI 1: NAVIGASI UTAMA --}}
             <li class="nav-item mb-1">
                 <small class="text-uppercase text-body-secondary fw-bold px-2 mb-1 d-block" style="font-size: 0.68rem; letter-spacing: 0.5px;">Navigasi Utama</small>
@@ -190,7 +228,7 @@
                             Daftar Akun
                         </a>
                     @endif
-                    
+
                     <a class="btn btn-brand w-100 rounded-3 py-2 d-flex align-items-center justify-content-center gap-2 shadow-sm" href="{{ route('login') }}">
                         <i class="bi bi-box-arrow-in-right"></i>
                         <span>Masuk</span>
